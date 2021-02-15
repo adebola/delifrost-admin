@@ -1,0 +1,104 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-info card-header-icon">
+                        <button class="btn btn-info btn-lg pull-right mt-4" (click)="onNew()">New</button>
+                        <div class="card-icon">
+                            <i class="material-icons">dynamic_feed</i>
+                        </div>
+                        <h4 class="card-title">Product Categories</h4>
+                    </div>
+                    <div class="card-body">
+                        <mat-table matSort [dataSource]="datasource" *ngIf="!(datasource.loading$ | async); else loading">
+                            <ng-container matColumnDef="id">
+                                <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
+                                <mat-cell *matCellDef="let category">{{category.id}}</mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="category">
+                                <mat-header-cell *matHeaderCellDef>Category</mat-header-cell>
+                                <mat-cell *matCellDef="let category">{{category.name}}</mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="image">
+                                <mat-header-cell mat-header-cell *matHeaderCellDef >Image</mat-header-cell>
+                                <mat-cell mat-cell *matCellDef="let category" > <img [src]="category.image_url" style="max-width: 50px;" /> </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="actions">
+                                <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+                                <mat-cell mat-cell *matCellDef="let category" class="td-actions text-right">
+                                    <i class="material-icons" style="color: #4CAF50; cursor: pointer;" (click)="onEdit(category.id)">edit</i>
+                                    <i class="material-icons" style="color: orangered; cursor: pointer;" (click)="onDelete(category.id)">close</i>
+                                    <ng-container *ngIf="category.subCategories.length > 0">
+                                        <mat-icon id="expand_more" #expand_more *ngIf="!category.close">expand_more</mat-icon>
+                                        <mat-icon id="expand_less" #expand_less *ngIf="category.close">expand_less</mat-icon>
+                                    </ng-container>
+                                </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns;"
+                                     class="category-row"
+                                     [cdkDetailRow]="row" [cdkDetailRowTpl]="tpl"
+                                     (toggleChange)="onToggleChange($event,row)">>
+                            </mat-row>
+                        </mat-table>
+
+                        <mat-paginator #paginator
+                                       [length]="datasource.length"
+                                       [pageIndex]="0"
+                                       [pageSize]="20"
+                                       [pageSizeOptions]="[20, 40, 60, 80, 100]">
+                        </mat-paginator>
+
+                        <ng-template #loading>
+                            Loading Please Wait...
+                        </ng-template>
+
+                        <ng-template #tpl let-category>
+                            <div class="mat-row mx-5 my-5" [@detailExpand] *ngIf="category.subCategories.length > 0" style="border: 1px solid #01AEC6;">
+                                <mat-table matSort [dataSource]="category.subCategories">
+                                    <ng-container matColumnDef="id">
+                                        <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
+                                        <mat-cell *matCellDef="let category">{{category.id}}</mat-cell>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="category">
+                                        <mat-header-cell *matHeaderCellDef>Sub-Category</mat-header-cell>
+                                        <mat-cell *matCellDef="let category">{{category.name}}</mat-cell>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="image">
+                                        <mat-header-cell mat-header-cell *matHeaderCellDef >Image</mat-header-cell>
+                                        <mat-cell mat-cell *matCellDef="let category" > <img [src]="category.image_url" style="max-width: 50px;" /> </mat-cell>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="actions">
+                                        <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+                                        <mat-cell mat-cell *matCellDef="let category" class="td-actions text-right">
+                                            <i class="material-icons" style="color: #4CAF50; cursor: pointer;" (click)="onEdit(category.id)">edit</i>
+                                            <i class="material-icons" style="color: orangered; cursor: pointer;" (click)="onDelete(category.id)">close</i>
+                                        </mat-cell>
+                                    </ng-container>
+
+                                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                    <mat-row *matRowDef="let row; columns: displayedColumns;">
+                                    </mat-row>
+                                </mat-table>
+<!--                                <button class="btn btn-warning pull-right" (click)="onNewSubCategory(category.id)">New Sub-Category</button>-->
+                            </div>
+
+<!--                            <div class="container my-2" *ngIf="category.subCategories.length == 0" >-->
+<!--                                <button  class="btn btn-warning pull-right" (click)="onNewSubCategory(category.id)">New Sub-Category</button>-->
+<!--                            </div>-->
+
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

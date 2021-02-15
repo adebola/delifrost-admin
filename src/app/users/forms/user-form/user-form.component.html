@@ -1,0 +1,129 @@
+<div class="main-content">
+    <div class="loading" *ngIf="serverLoading">
+        <mat-progress-spinner [color]="'primary'" class="loader" mode="indeterminate"></mat-progress-spinner>
+    </div>
+    <div class="card ">
+        <div class="card-header card-header-info card-header-text">
+            <div class="card-text">
+                <h4 class="card-title">User Form</h4>
+            </div>
+        </div>
+        <div class="card-body ">
+            <form [formGroup]="userForm" (ngSubmit)="onSubmit(userForm)" class="form-horizontal"
+                  *ngIf="!busy; else loading">
+
+                <!--E-Mail Address-->
+                <div class="row">
+                    <label class="col-sm-2 col-form-label">E-Mail</label>
+                    <div class="col-sm-10">
+                        <mat-form-field class="example-full-width">
+                            <input type="email" matInput class="form-control" id="email" formControlName="email"
+                                   name="email"
+                                   placeholder="E-Mail Address...">
+                        </mat-form-field>
+                        <mat-error *ngIf="userForm.controls.email.touched && userForm.controls.email.invalid">
+                            <span *ngIf="userForm.controls.email.errors.required">This field is mandatory.</span>
+                            <span *ngIf="userForm.controls.email.errors?.pattern">Please enter a valid E-Mail address.</span>
+                        </mat-error>
+                    </div>
+                </div>
+
+                <!--Password-->
+                <div class="row">
+                    <label class="col-sm-2 col-form-label">Password</label>
+                    <div class="col-sm-10">
+                        <mat-form-field class="example-full-width">
+                            <input type="password" matInput class="form-control" id="password"
+                                   formControlName="password"
+                                   name="password"
+                                   placeholder="Password...">
+                        </mat-form-field>
+                        <mat-error
+                                *ngIf="userForm.controls.password.touched && userForm.controls.password.invalid && !editMode">
+                            <span *ngIf="userForm.controls.password.errors.required">This field is mandatory.</span>
+                        </mat-error>
+                    </div>
+                </div>
+
+                <!--FullName-->
+                <div class="row">
+                    <label class="col-sm-2 col-form-label">Full Name</label>
+                    <div class="col-sm-10">
+                        <mat-form-field class="example-full-width">
+                            <input type="text" matInput class="form-control" id="fullname" formControlName="fullname"
+                                   name="fullname"
+                                   placeholder="FullName...">
+                        </mat-form-field>
+                        <mat-error *ngIf="userForm.controls.fullname.touched && userForm.controls.fullname.invalid">
+                            <span *ngIf="userForm.controls.fullname?.errors.required">This field is mandatory.</span>
+                        </mat-error>
+                    </div>
+                </div>
+
+                <!--Telephone Number-->
+                <div class="row">
+                    <label class="col-sm-2 col-form-label">Telephone</label>
+                    <div class="col-sm-10">
+                        <mat-form-field class="example-full-width">
+                            <input type="text" matInput class="form-control" id="telephone" formControlName="telephone"
+                                   name="telephone"
+                                   placeholder="Telephone Number...">
+                        </mat-form-field>
+
+                        <mat-error *ngIf="userForm.controls.telephone.touched && userForm.controls.telephone.invalid">
+                            <span *ngIf="userForm.controls.telephone.errors?.required">This field is mandatory.</span>
+                            <span *ngIf="userForm.controls.telephone.errors?.pattern">Telephone Number must be numbers.</span>
+                            <span *ngIf="userForm.controls.telephone.errors.minlength">Telephone Number must be a minimum of 11 characters.</span>
+                        </mat-error>
+                    </div>
+                </div>
+
+                <!--Organization-->
+                <div class="row">
+                    <label class="col-sm-2 col-form-label">Organization</label>
+                    <div class="col-sm-10">
+                        <mat-form-field class="example-full-width">
+                            <input type="text" matInput class="form-control" id="organization"
+                                   formControlName="organization"
+                                   name="organization"
+                                   placeholder="Organization...">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!--Activated and Admin User-->
+                <div class="row">
+                    <div class="col-2"></div>
+                    <div class="col-4">
+                        <mat-checkbox id="activated" name="new" formControlName="activated">Activated</mat-checkbox>
+                    </div>
+                    <div class="col-2"></div>
+                    <div class="col-4">
+                        <mat-checkbox id="admin" name="admin" formControlName="admin">Admin User</mat-checkbox>
+                    </div>
+                </div>
+
+                <!--Address-->
+                <div class="row">
+                    <label class="col-sm-2 col-form-label">Address</label>
+                    <div class="col-sm-10">
+                        <mat-form-field class="example-full-width">
+                            <textarea placeholder="Address" matInput id="address" name="address"
+                                      formControlName="address"></textarea>
+                        </mat-form-field>
+                        <mat-error *ngIf="userForm.controls.address.touched && userForm.controls.address.invalid">
+                            <span *ngIf="userForm.controls.address.errors.required">This field is mandatory.</span>
+                        </mat-error>
+                    </div>
+                </div>
+
+                <div class="card-footer justify-content-end">
+                    <button class="btn btn-info btn-lg" type="submit">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <ng-template #loading>
+        Loading Please Wait...
+    </ng-template>
+</div>

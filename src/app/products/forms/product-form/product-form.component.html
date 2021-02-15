@@ -1,0 +1,203 @@
+<div class="main-content">
+    <div class="loading" *ngIf="serverLoading">
+        <mat-progress-spinner [color]="'primary'" class="loader" mode="indeterminate"></mat-progress-spinner>
+    </div>
+    <div class="card ">
+        <div class="card-header card-header-info card-header-text">
+            <div class="card-text">
+                <h4 class="card-title">Product Form</h4>
+            </div>
+            <div *ngIf="editMode" class="container d-flex justify-content-end">
+                <a class="mr-3 btn btn-sm" (click)="previous()">Previous</a>
+                <a class="btn btn-sm" (click)="next()">Next</a>
+                <<a class="btn btn-sm" (click)="saveNext(productForm)"> Save & Next</a>
+            </div>
+        </div>
+        <div class="card-body ">
+            <form [formGroup]="productForm" (ngSubmit)="onSubmit(productForm)" class="form-horizontal"
+                  *ngIf="!busy; else loading">
+
+                <div class="row">
+                    <label class="col-sm-2 col-form-label">Name</label>
+                    <div class="col-sm-10">
+                        <mat-form-field class="example-full-width">
+                            <input type="text" matInput class="form-control" id="name" formControlName="name"
+                                   name="name"
+                                   placeholder="Product Name...">
+                        </mat-form-field>
+                        <mat-error *ngIf="productForm.controls.name.touched && productForm.controls.name.invalid">
+                            <span *ngIf="productForm.controls.name.errors.required">This field is mandatory.</span>
+                        </mat-error>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-sm-2 col-form-label">Brand</label>
+                    <div class="col-sm-10">
+                        <mat-form-field class="example-full-width">
+                            <input type="text" matInput class="form-control" id="brand" formControlName="brand"
+                                   name="brand"
+                                   placeholder="Product Brand Name...">
+                        </mat-form-field>
+                        <mat-error *ngIf="productForm.controls.brand.touched && productForm.controls.brand.invalid">
+                            <span *ngIf="productForm.controls.brand.errors.required">This field is mandatory.</span>
+                        </mat-error>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-sm-2 col-form-label">Price</label>
+                    <div class="col-sm-4">
+                        <mat-form-field>
+                            <input type="number" matInput class="form-control" id="price" formControlName="price"
+                                   name="price"
+                                   placeholder="Product Price...">
+                        </mat-form-field>
+                    </div>
+                    <label class="col-sm-2 col-form-label">Discount</label>
+                    <div class="col-sm-4">
+                        <mat-form-field>
+                            <input type="number" matInput class="form-control" id="discount" formControlName="discount"
+                                   name="discount" step="0.1"
+                                   placeholder="Product Discount...">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-sm-2 col-form-label">Category</label>
+                    <div class="col-sm-4">
+                        <mat-form-field>
+                            <mat-select placeholder="Product Category" name="category" formControlName="category"
+                                        id="category">
+                                <mat-option *ngFor="let category of categoryService.categories$ | async"
+                                            [value]="category.id">
+                                    {{ category.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <label class="col-sm-2 col-form-label">UoM</label>
+                    <div class="col-sm-4">
+                        <mat-form-field>
+                            <mat-select placeholder="Unit of Measure" name="category" formControlName="uom" id="uom">
+                                <mat-option *ngFor="let uom of ['KG', 'CTN']" [value]="uom">
+                                    {{ uom }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-2"></div>
+                    <div class="col-4">
+                        <mat-checkbox id="new" name="new" formControlName="new">New Product</mat-checkbox>
+                    </div>
+                    <div class="col-2"></div>
+                    <div class="col-4">
+                        <mat-checkbox id="sale" name="sale" formControlName="sale">On Sale</mat-checkbox>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-sm-2 col-form-label">Quantity</label>
+                    <div class="col-4">
+                        <mat-form-field>
+                            <input type="number" matInput class="form-control" id="quantity" formControlName="quantity"
+                                   name="quantity"
+                                   placeholder="Quantity...">
+                        </mat-form-field>
+                    </div>
+                    <label class="col-sm-2 col-form-label">Code</label>
+                    <div class="col-4">
+                        <mat-form-field>
+                            <input type="number" matInput class="form-control" id="code" formControlName="code"
+                                   name="code"
+                                   placeholder="Item Code...">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-2"></div>
+                    <div class="col-4">
+                        <mat-checkbox id="discontinued" name="discontinued" formControlName="discontinued">Discontinued</mat-checkbox>
+                    </div>
+                    <div class="col-2"></div>
+                    <div class="col-4">
+                        <mat-checkbox id="taxes" name="taxes" formControlName="taxes">VAT Exempt</mat-checkbox>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-sm-2 col-form-label">Description</label>
+                    <div class="col-sm-10">
+                        <mat-form-field class="example-full-width">
+                            <textarea placeholder="Product Description" matInput id="description" name="description"
+                                      formControlName="description"></textarea>
+                        </mat-form-field>
+                        <mat-error
+                                *ngIf="productForm.controls.description.touched && productForm.controls.description.invalid">
+                            <span *ngIf="productForm.controls.description.errors.required">This field is mandatory.</span>
+                        </mat-error>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-sm-2 col-form-label">Image</label>
+                    <div class="col-10">
+                         <span class="fileinput fileinput-new text-center bmd-form-group mt-3"
+                               data-provides="fileinput">
+                    <div class="fileinput-new thumbnail">
+                        <img [src]="inputFileName" alt="...">
+                    </div>
+                    <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                    <div>
+                        <span class="btn btn-info btn-round btn-file">
+                            <span class="fileinput-new">Select image</span>
+                            <span class="fileinput-exists">Change</span>
+                            <input (change)="onFileChange($event)" type="file" name="image" id="image"
+                                   formControlName="image" class="form-control"/>
+                        </span>
+                        <a href="#" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i
+                                class="fa fa-times"></i> Remove</a>
+                    </div>
+                    <mat-error *ngIf="productForm.controls.image.touched && productForm.controls.image.invalid">
+                        <span *ngIf="productForm.controls.image.errors.required">This field is mandatory.</span>
+                    </mat-error>
+
+                    <mat-error *ngIf="imageError">
+                        <span>Invalid Image type please select one of jpg, jpeg or png formats</span>
+                    </mat-error>
+
+                </span>
+                    </div>
+                </div>
+
+                <div class="card-footer justify-content-end">
+                    <button class="btn btn-info btn-lg" type="submit">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card" *ngIf="editMode && tags">
+        <div class="card-header card-header-info card-header-text">
+            <div class="card-text">
+                <h4 class="card-title">Product Search Tags</h4>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="col-md-6">
+                <legend>Tags</legend>
+                Regular: <tag-input [(ngModel)]="tagModel" [identifyBy]="'value'" [displayBy]="'display'"
+                                    (onAdd)="onItemAdded($event)"
+                                    (onRemove)="onItemRemoved($event)"theme='filled-theme'></tag-input>
+            </div>
+        </div>
+    </div>
+    <ng-template #loading>
+        Loading Please Wait...
+    </ng-template>
+</div>

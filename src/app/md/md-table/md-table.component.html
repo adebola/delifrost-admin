@@ -1,0 +1,23 @@
+<div class="content table-responsive">
+    <table class="table" *ngIf="(data$ | async) as data; else loading">
+        <tbody>
+        <tr *ngFor="let row of data.dataRows">
+            <td>
+                <div class="flag">
+                    <img [src]="row.imagepath" alt="">
+                </div>
+            </td>
+            <td>
+                {{row.name}}
+            </td>
+            <td>
+                {{row.totals | currency: "₦":"symbol":"1.0-0"}}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <ng-template #loading>
+        <p>Loading Please Wait</p>
+    </ng-template>
+</div>

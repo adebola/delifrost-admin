@@ -1,0 +1,88 @@
+<div class="main-content">
+    <div class="loader" *ngIf="serverLoading">
+        <mat-progress-spinner [color]="'primary'" class="loading" mode="indeterminate"></mat-progress-spinner>
+    </div>
+    <div class="card ">
+        <div class="card-header card-header-info card-header-text">
+            <div class="card-text">
+                <h4 class="card-title">Category Form</h4>
+            </div>
+        </div>
+        <div class="card-body ">
+            <form [formGroup]="categoryForm" (ngSubmit)="onSubmit(categoryForm)" class="form-horizontal" *ngIf="!busy; else loading">
+                <span class="bmd-form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="material-icons">email</i>
+                      </span>
+                    </div>
+                    <input type="text" matInput class="form-control" id="name" formControlName="name" name="name"
+                           placeholder="Category Name...">
+                    <mat-error *ngIf="categoryForm.controls.name.touched && categoryForm.controls.name.invalid">
+                        <span *ngIf="categoryForm.controls.name.errors.required">This field is mandatory.</span>
+                    </mat-error>
+                  </div>
+                </span>
+
+                <span class="fileinput fileinput-new text-center bmd-form-group mt-3" data-provides="fileinput">
+                    <div class="fileinput-new thumbnail">
+                        <img [src]="inputFileName" alt="...">
+                    </div>
+                    <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                    <div>
+                        <span class="btn btn-info btn-round btn-file">
+                            <span class="fileinput-new">Select image</span>
+                            <span class="fileinput-exists">Change</span>
+                            <input (change)="onFileChange($event)" type="file" name="image" id="image" formControlName="image" class="form-control"/>
+                        </span>
+                        <a href="#" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i
+                                class="fa fa-times"></i> Remove</a>
+                    </div>
+                    <mat-error *ngIf="categoryForm.controls.image.touched && categoryForm.controls.image.invalid">
+                        <span *ngIf="categoryForm.controls.image.errors.required">This field is mandatory.</span>
+                    </mat-error>
+
+                    <mat-error *ngIf="imageError">
+                        <span>Invalid Image type please select one of jpg, jpeg or png formats</span>
+                    </mat-error>
+
+                </span>
+
+                <div class="card-footer justify-content-end">
+                    <button class="btn btn-info btn-lg" type="submit">Save</button>
+                </div>
+
+                <div class="row" *ngIf="editMode && showSubCategory">
+                    <div class="col-4 ml-5" style="border: 1px solid grey">
+                        <label>Sub-Categories</label>
+                        <mat-selection-list [multiple]="false" (selectionChange)="onSelectSubCategory($event)" #select1>
+                            <mat-list-option *ngFor="let subcategories of category.subCategories" [value]="subcategories.id">
+                                {{subcategories.name}}
+                            </mat-list-option>
+                        </mat-selection-list>
+                    </div>
+                    <div class="col-2 d-flex flex-column justify-content-center">
+                        <button (click)="onMoveRight()" class="btn btn-success btn-xs" type="button" disabled #right>
+                            <i class="material-icons">navigate_next</i>
+                        </button>
+                        <button (click)="onMoveLeft()" class="btn btn-success btn-xs" type="button" disabled #left>
+                            <i class="material-icons">navigate_before</i>
+                        </button>
+                    </div>
+                    <div class="col-4" style="border: 1px solid grey">
+                        <label>Other Available Categories</label>
+                        <mat-selection-list [multiple]="false" (selectionChange)="onSelectOtherCategory($event)" #select2>
+                            <mat-list-option *ngFor="let category of otherCategories" [value]="category.id">
+                                {{category.name}}
+                            </mat-list-option>
+                        </mat-selection-list>
+                    </div>
+                </div>
+            </form>
+            <ng-template #loading>
+                Loading Please Wait...
+            </ng-template>
+        </div>
+    </div>
+</div>

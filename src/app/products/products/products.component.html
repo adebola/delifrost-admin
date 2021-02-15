@@ -1,0 +1,73 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-info card-header-icon">
+                        <button class="btn btn-info btn-lg pull-right mt-4" (click)="onNew()">New</button>
+                        <div class="card-icon">
+                            <i class="material-icons">local_parking</i>
+                        </div>
+                        <h4 class="card-title">Products</h4>
+                    </div>
+                    <div class="card-body">
+                        <mat-form-field style="max-width: 300px;">
+                            <input  matInput placeholder="Search Products" #input>
+                        </mat-form-field>
+
+                        <div class="table-responsive">
+                            <mat-table matSort matSortDirection="asc" [dataSource]="datasource" *ngIf="!(datasource.loading$ | async); else loading">
+                                <ng-container matColumnDef="code">
+                                    <mat-header-cell *matHeaderCellDef>Code</mat-header-cell>
+                                    <mat-cell *matCellDef="let product">{{product.bundles[0].sku}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="name">
+                                    <mat-header-cell mat-header-cell *matHeaderCellDef >Name</mat-header-cell>
+                                    <mat-cell *matCellDef="let product">{{product.name}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="category">
+                                    <mat-header-cell *matHeaderCellDef>Category</mat-header-cell>
+                                    <mat-cell *matCellDef="let product">{{product.category}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="price">
+                                    <mat-header-cell *matHeaderCellDef>Price</mat-header-cell>
+                                    <mat-cell *matCellDef="let product">{{product.bundles[0].price |  currency: "₦":"symbol":"1.0-0"}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="brand">
+                                    <mat-header-cell *matHeaderCellDef>Brand</mat-header-cell>
+                                    <mat-cell *matCellDef="let product">{{product.brand}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="actions">
+                                    <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+                                    <mat-cell mat-cell *matCellDef="let product" class="td-actions text-right">
+                                        <i class="material-icons" style="color: #4CAF50; cursor: pointer;" (click)="onEdit(product.productId)">edit</i>
+                                        <i class="material-icons" style="color: orangered; cursor: pointer;" (click)="onDelete(product.productId)">close</i>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+                            </mat-table>
+
+                            <mat-paginator #paginator
+                                           [length]="datasource.length"
+                                           [pageIndex]="0"
+                                           [pageSize]="20"
+                                           [pageSizeOptions]="[20, 40, 60, 80, 100]">
+                            </mat-paginator>
+                            <ng-template #loading>
+                                Loading Please Wait...
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

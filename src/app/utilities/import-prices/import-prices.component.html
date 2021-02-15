@@ -1,0 +1,19 @@
+<div class="main-content">
+    <div class="loading" *ngIf="busy">
+        <mat-progress-spinner [color]="'primary'" class="loader" mode="indeterminate"></mat-progress-spinner>
+    </div>
+
+    <h2>Please Select Price File (CSV)</h2>
+
+    <form>
+        <input type="file" style="display: none"
+        id="txtFileUpload"
+       (change)="changeListener($event)" accept=".csv" #hiddenFileInput/>
+
+        <label style="display: block" *ngIf="selectedFile">File Selected {{selectedFile.name}}</label>
+
+        <button (click)="hiddenFileInput.click()"  type="button" class="btn btn-warning btn-lg mr-3">Select CSV File</button>
+        <button (click)="onSubmit()"  type="submit" class="btn btn-info btn-lg">Update Prices</button>
+    </form>
+</div>
+

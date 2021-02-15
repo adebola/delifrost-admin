@@ -1,0 +1,95 @@
+
+<div class="wrapper wrapper-full-page">
+
+  <div class="page-header login-page header-filter" style="background-color: #a3d7e7;">
+    <!--   you can change the color of the filter page using: data-color="blue | purple | green | orange | red | rose " -->
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 col-md-8 col-sm-10 ml-auto mr-auto">
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm)" class="form">
+            <div class="card card-login">
+              <div class="card-header card-header-info text-center">
+                <h4 class="card-title">Log in</h4>
+                <div class="social-line">
+                  <a href="#" class="btn btn-just-icon btn-link btn-white">
+                    <i class="fa fa-facebook-square"></i>
+                  </a>
+                  <a href="#" class="btn btn-just-icon btn-link btn-white">
+                    <i class="fa fa-twitter"></i>
+                  </a>
+                  <a href="#" class="btn btn-just-icon btn-link btn-white">
+                    <i class="fa fa-google-plus"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="card-body ">
+                <div class="loader" *ngIf="busy">
+                  <mat-progress-spinner [color]="'primary'" class="loading" mode="indeterminate"></mat-progress-spinner>
+                </div>
+                <span class="bmd-form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="material-icons">email</i>
+                      </span>
+                    </div>
+                    <input type="email" class="form-control" id="email" formControlName="email" name="email" placeholder="Email...">
+                    <div *ngIf="loginForm.controls.email.touched && loginForm.controls.email.errors?.required" class="text text-danger">
+                                Email Address is required
+                    </div>
+                    <div *ngIf="loginForm.controls.email.touched && loginForm.controls.email.errors?.pattern" class="text text-danger">
+                                Invalid Email Address
+                    </div>
+                  </div>
+                </span>
+
+                <span class="bmd-form-group">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="material-icons">lock_outline</i>
+                      </span>
+                    </div>
+                    <input type="password" id="password" class="form-control" name="password" formControlName="password" placeholder="Password...">
+                    <div *ngIf="loginForm.controls.password.touched && loginForm.controls.password.errors?.required" class="text text-danger">
+                                Password is required
+                    </div>
+                  </div>
+                </span>
+
+                <div class="bmd-form-group mt-4 pl-4 ml-4">
+                            <re-captcha (resolved)="resolved($event)" siteKey="6LdBMvkZAAAAAHvvSY40x6YyBkV-tKvdE6zQTgXz"></re-captcha>
+                            <div *ngIf="captchaError" class="error required">Recaptcha not verified.</div>
+
+                </div>
+
+              </div>
+              <div class="card-footer justify-content-center">
+                <button class="btn btn-info btn-lg" type="submit">Login</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <footer class="footer ">
+      <div class="container">
+        <nav class="pull-left">
+          <ul>
+            <li>
+              <a href="https://www.deli-frost.com">
+                About Us
+              </a>
+            </li>
+
+          </ul>
+        </nav>
+        <div class="copyright pull-right">
+          &copy;
+            {{test | date: 'yyyy'}}, made with <i class="material-icons">favorite</i> by
+          <a href="http://www.factorialsystems.io" target="_blank">Factorial Systems!</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>

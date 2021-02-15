@@ -1,0 +1,138 @@
+<div class="main-content">
+    <div class="card ">
+        <div class="card-header card-header-info card-header-text">
+            <div class="card-text">
+                <h4 class="card-title">Order Details</h4>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="container form-horizontal" *ngIf="order; else loading">
+                <div class="row">
+                    <label class="col-sm-2 col-form-label">Customer</label>
+                    <div class="col-sm-4">
+                        <mat-form-field class="example-full-width">
+                            <input type="text" matInput class="form-control" [value]="order.full_name" disabled/>
+                        </mat-form-field>
+                    </div>
+                    <label class="col-sm-2 col-form-label">Date</label>
+                    <div class="col-sm-4">
+                        <mat-form-field class="example-full-width">
+                            <input type="text" matInput class="form-control" [value]="order.orderedAt | date" disabled/>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-sm-2 col-form-label">Payment Ref</label>
+                    <div class="col-sm-4">
+                        <mat-form-field class="example-full-width">
+                            <input type="text" matInput class="form-control" [value]="order.paymentRef" disabled/>
+                        </mat-form-field>
+                    </div>
+                    <label class="col-sm-2 col-form-label">Transaction ID</label>
+                    <div class="col-sm-4">
+                        <mat-form-field class="example-full-width">
+                            <input type="text" matInput class="form-control" [value]="order.transaction_id" disabled/>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-sm-2 col-form-label">Transaction PIN</label>
+                    <div class="col-sm-4">
+                        <mat-form-field class="example-full-width">
+                            <input type="text" matInput class="form-control" [value]="order.pin" disabled/>
+                        </mat-form-field>
+                    </div>
+                    <label class="col-sm-2 col-form-label">Total Amount</label>
+                    <div class="col-sm-4">
+                        <mat-form-field class="example-full-width">
+                            <input type="text" matInput class="form-control"
+                                   [value]="order.orderAmount | currency: '₦':'symbol':'1.0-0'" disabled/>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-2"></div>
+                    <div class="col-4">
+                        <mat-checkbox [value]="order.deliver" [disabled]="'true'">Deliver
+                        </mat-checkbox>
+                    </div>
+                    <label class="col-sm-2 col-form-label">Telephone</label>
+                    <div class="col-sm-4">
+                        <mat-form-field class="example-full-width">
+                            <input type="text" matInput class="form-control" [value]="order.telephone" disabled/>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <label class="col-sm-2 col-form-label">Delivery Address</label>
+                    <div class="col-sm-10">
+                        <mat-form-field class="example-full-width">
+                            <textarea matInput disabled>{{order.address}}</textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <ng-container *ngIf="order">
+                <div class="card-footer justify-content-end" style="max-width: 500px;">
+                    <button class="btn btn-warning btn-lg mr-5" (click)="onSubmit()">
+                        {{order.fulfilledAt ? 'Re-Schedule Order' : 'Schedule Order'}}
+                    </button>
+
+                     <mat-form-field>
+                        <input matInput id="date" name="date" [matDatepicker]="picker"
+                               [value]="defaultDate" placeholder="Choose Schedule date" (click)="picker.open()"
+                               #date>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+
+                <div class="container" *ngIf="order.fulfilledAt">
+                    <label class="mr-3">Order Delivery Scheduled for {{order.fulfilledAt | date}}</label>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+
+    <div class="card ">
+        <div class="card-header card-header-info card-header-text">
+            <div class="card-text">
+                <h4 class="card-title">Order Items</h4>
+            </div>
+        </div>
+        <div class="card-body" *ngIf="order && order.orderItems">
+            <mat-table [dataSource]="order.orderItems">
+                <ng-container matColumnDef="product">
+                    <mat-header-cell *matHeaderCellDef>Product</mat-header-cell>
+                    <mat-cell *matCellDef="let orderitem">{{orderitem.product_name}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="quantity">
+                    <mat-header-cell *matHeaderCellDef>Quantity</mat-header-cell>
+                    <mat-cell *matCellDef="let orderitem">{{orderitem.quantity}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="price">
+                    <mat-header-cell *matHeaderCellDef>Total Price</mat-header-cell>
+                    <mat-cell
+                            *matCellDef="let orderitem">{{orderitem.total_price | currency: "₦":"symbol":"1.0-0"}}</mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="orderItemColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: orderItemColumns"></mat-row>
+
+            </mat-table>
+        </div>
+    </div>
+
+    <ng-template #loading>
+        Loading Please Wait...
+    </ng-template>
+</div>

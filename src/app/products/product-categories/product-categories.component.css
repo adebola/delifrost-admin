@@ -1,0 +1,21 @@
+.mat-column-id, .mat-column-actions {
+    max-width: 70px;
+}
+
+.category-row {
+    position: relative;
+    overflow: initial;
+}
+
+.category-row:not(.expanded) {
+    cursor: pointer;
+}
+
+.category-row:not(.expanded):hover {
+    background: #f5f5f5;
+}
+
+.category-row.expanded {
+    border-bottom-color: transparent;
+    cursor: pointer;
+}
